@@ -13,6 +13,7 @@ import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 import Meta from 'gi://Meta';
 import Shell from 'gi://Shell';
+import St from 'gi://St';
 
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as Layout from 'resource:///org/gnome/shell/ui/layout.js'
@@ -94,8 +95,7 @@ class Dock extends Dash.Dash {
         super._init();
 
         Main.layoutManager.addTopChrome(this);
-
-        this.showAppsButton.set_toggle_mode(false);
+        this.showAppsButton.toggle_mode = false;
         this._dashContainer.set_track_hover(true);
         this._dashContainer.set_reactive(true);
         this.show();
@@ -106,7 +106,7 @@ class Dock extends Dash.Dash {
 
         this._dashContainer.connectObject('notify::hover', this._on_dock_hover.bind(this), this);
         this._dashContainer.connectObject('scroll-event', (actor, event) => Main.wm.handleWorkspaceScroll(event), this);
-        this.showAppsButton.connectObject('button-release-event', () => Main.overview.showApps(), this);
+        this.showAppsButton.connectObject('clicked', () => {Main.overview.showApps();}, this);
 
         Main.overview.connectObject('item-drag-begin', () => {this._dragging = true;}, this);
         Main.overview.connectObject('item-drag-end', () => {this._dragging = false;}, this);
